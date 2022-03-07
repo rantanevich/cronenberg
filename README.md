@@ -6,6 +6,20 @@
 
 It's like cron, but kinda twisted.
 
+## Dockerfile usage
+
+An idiomatic way to use the utility:
+
+```Dockerfile
+FROM rantanevich/cronenberg
+
+FROM 3.9.10-slim-bullseye
+COPY --from=0 /cronenberg /
+
+ENTRYPOINT ["/cronenberg"]
+CMD ["jobs.yaml"]
+```
+
 ## Installation ##
 
 You can either download the appropriate release from the [releases page](https://github.com/ess/cronenberg/releases) or install via `go get`:
