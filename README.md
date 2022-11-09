@@ -6,27 +6,11 @@
 
 It's like cron, but kinda twisted.
 
-## Dockerfile usage
+## Installation
 
-An idiomatic way to use the utility:
+The latest version can be downloaded from the [release page](https://github.com/rantanevich/cronenberg/releases).
 
-```Dockerfile
-FROM rantanevich/cronenberg
-
-FROM 3.9.10-slim-bullseye
-COPY --from=0 /cronenberg /
-
-ENTRYPOINT ["/cronenberg"]
-CMD ["jobs.yaml"]
-```
-
-## Installation ##
-
-You can either download the appropriate release from the [releases page](https://github.com/ess/cronenberg/releases) or install via `go get`:
-
-```
-go get -u github.com/ess/cronenberg/cmd/cronenberg
-```
+Docker images are available on [Docker Hub](https://hub.docker.com/r/rantanevich/cronenberg).
 
 ## Basics ##
 
