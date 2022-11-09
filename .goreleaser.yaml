@@ -1,0 +1,86 @@
+---
+env:
+- CGO_ENABLED=0
+
+before:
+  hooks:
+  - go mod download
+
+builds:
+- main: ./cmd/cronenberg
+  binary: "{{ .ProjectName }}"
+  targets:
+  - darwin_amd64
+  - darwin_arm64
+  - linux_amd64
+  - linux_arm_6
+  - linux_arm_7
+  - linux_arm64
+  - windows_amd64
+
+dockers:
+- goarch: amd64
+  image_templates:
+  - rantanevich/{{ .ProjectName }}:{{ .Version }}-amd64
+  use: buildx
+  build_flag_templates:
+  - --platform=linux/amd64
+  - --label=org.opencontainers.image.created={{ .Date }}
+  - --label=org.opencontainers.image.title={{ .ProjectName }}
+  - --label=org.opencontainers.image.url=https://github.com/rantanevich/{{ .ProjectName }}
+  - --label=org.opencontainers.image.source=https://github.com/rantanevich/{{ .ProjectName }}
+  - --label=org.opencontainers.image.revision={{ .FullCommit }}
+  - --label=org.opencontainers.image.version={{ .Version }}
+- goarch: arm64
+  image_templates:
+  - rantanevich/{{ .ProjectName }}:{{ .Version }}-arm64
+  use: buildx
+  build_flag_templates:
+  - --platform=linux/arm64
+  - --label=org.opencontainers.image.created={{ .Date }}
+  - --label=org.opencontainers.image.title={{ .ProjectName }}
+  - --label=org.opencontainers.image.url=https://github.com/rantanevich/{{ .ProjectName }}
+  - --label=org.opencontainers.image.source=https://github.com/rantanevich/{{ .ProjectName }}
+  - --label=org.opencontainers.image.revision={{ .FullCommit }}
+  - --label=org.opencontainers.image.version={{ .Version }}
+- goarch: arm
+  goarm: 6
+  image_templates:
+  - rantanevich/{{ .ProjectName }}:{{ .Version }}-armv6
+  use: buildx
+  build_flag_templates:
+  - --platform=linux/arm/v6
+  - --label=org.opencontainers.image.created={{ .Date }}
+  - --label=org.opencontainers.image.title={{ .ProjectName }}
+  - --label=org.opencontainers.image.url=https://github.com/rantanevich/{{ .ProjectName }}
+  - --label=org.opencontainers.image.source=https://github.com/rantanevich/{{ .ProjectName }}
+  - --label=org.opencontainers.image.revision={{ .FullCommit }}
+  - --label=org.opencontainers.image.version={{ .Version }}
+- goarch: arm
+  goarm: 7
+  image_templates:
+  - rantanevich/{{ .ProjectName }}:{{ .Version }}-armv7
+  use: buildx
+  build_flag_templates:
+  - --platform=linux/arm/v7
+  - --label=org.opencontainers.image.created={{ .Date }}
+  - --label=org.opencontainers.image.title={{ .ProjectName }}
+  - --label=org.opencontainers.image.url=https://github.com/rantanevich/{{ .ProjectName }}
+  - --label=org.opencontainers.image.source=https://github.com/rantanevich/{{ .ProjectName }}
+  - --label=org.opencontainers.image.revision={{ .FullCommit }}
+  - --label=org.opencontainers.image.version={{ .Version }}
+
+docker_manifests:
+- name_template: rantanevich/{{ .ProjectName }}:{{ .Version }}
+  image_templates:
+  - rantanevich/{{ .ProjectName }}:{{ .Version }}-amd64
+  - rantanevich/{{ .ProjectName }}:{{ .Version }}-arm64
+  - rantanevich/{{ .ProjectName }}:{{ .Version }}-armv6
+  - rantanevich/{{ .ProjectName }}:{{ .Version }}-armv7
+
+archives:
+- name_template: "{{ .ProjectName }}-{{ .Os }}-{{ .Arch }}{{ with .Arm }}v{{ . }}{{ end }}"
+  format: binary
+
+checksum:
+  name_template: checksums.txt
