@@ -26,34 +26,16 @@ func (formatter *Formatter) Format(entry *logrus.Entry) ([]byte, error) {
 	fmt.Fprintf(
 		b,
 		entryFormat,
-		levelText,
-		timestamp(entry.Time.Sub(baseTimestamp)),
+		entry.Time.Format(time.RFC3339),
 		entry.Data["context"],
+		levelText,
 		entry.Message,
 	)
 
 	return b.Bytes(), nil
 }
 
-func timestamp(t time.Duration) string {
-	hours := t / time.Hour
-	t = t - (hours * time.Hour)
-
-	minutes := t / time.Minute
-	t = t - (minutes * time.Minute)
-
-	seconds := t / time.Second
-
-	return fmt.Sprintf("%02dh%02dm%02ds", int(hours), int(minutes), int(seconds))
-}
-
-var baseTimestamp time.Time
-
-var entryFormat = "%s[%s](%s) %s\n"
-
-func init() {
-	baseTimestamp = time.Now()
-}
+var entryFormat = "[%s] (%s) %s: %s\n"
 
 /*
 Copyright 2019 Dennis Walters
